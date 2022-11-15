@@ -30,6 +30,12 @@ async function run() {
             res.send(result)
         })
 
+        app.post('/book', async(req, res)=>{
+            const book = req.body;
+            const result = await booksCollection.insertOne(book)
+            res.send(result)
+        })
+
     }
     finally{
         // await client.close()
