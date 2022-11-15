@@ -36,6 +36,12 @@ async function run() {
             res.send(result)
         })
 
+        app.delete('/book/:id', async(req, res)=>{
+            const {id} = req.params;
+            const result = await booksCollection.deleteOne({_id: ObjectId(id)})
+            res.send(result)
+        })
+
     }
     finally{
         // await client.close()
