@@ -5,15 +5,15 @@ const app = express()
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 
-// Bookory_DB
-// gVGKVqwKbuoAdNiT
-
+// MiddleWares
 app.use(cors())
 app.use(express.json())
 
-const uri = "mongodb+srv://Bookory_DB:gVGKVqwKbuoAdNiT@cluster0.agg0z.mongodb.net/?retryWrites=true&w=majority";
+// Database Connection
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.agg0z.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+// All API For CRUD Operation
 async function run() {
     try{
         await client.connect()
@@ -38,7 +38,7 @@ async function run() {
 
         app.delete('/book/:id', async(req, res)=>{
             const {id} = req.params;
-            const result = await booksCollection.deleteOne({_id: ObjectId(id)})
+            const result = await booksCollection.deleteOne({_id:new ObjectId(id)})
             res.send(result)
         })
 
