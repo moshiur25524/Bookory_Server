@@ -56,6 +56,12 @@ async function run() {
 
         // Book Order API
 
+        app.get('/order', async(req, res)=>{
+            const OrdererEmail = req.query.email;
+            const orders = await orderCollection.find({email: OrdererEmail}).toArray()
+            res.send(orders)
+        })
+
         app.post('/order', async(req, res)=>{
             const order = req.body;
             const result = await orderCollection.insertOne(order)
