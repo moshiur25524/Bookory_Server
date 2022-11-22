@@ -18,7 +18,9 @@ async function run() {
     try{
         await client.connect()
         const booksCollection = client.db('book_info').collection('books')
+        const orderCollection = client.db('book_info').collection('orders')
 
+        // Books CRUD api
         app.get('/books', async(req, res)=>{
             const result = await booksCollection.find({}).toArray()
             res.send(result)
@@ -39,6 +41,24 @@ async function run() {
         app.delete('/book/:id', async(req, res)=>{
             const {id} = req.params;
             const result = await booksCollection.deleteOne({_id:new ObjectId(id)})
+            res.send(result)
+        })
+
+        app.put('/book/:id', async(req,res) =>{
+            const updatedBook = req.body;
+            const {id} = req.params;
+            const updateDoc = {
+                $set: updatedBook
+              };
+            const result = await booksCollection.updateOne({_id:new ObjectId(id)}, updateDoc, {upsert: true})
+            res.send(result)
+        })
+
+        // Book Order API
+
+        app.post('/order', async(req, res)=>{
+            const order = req.body;
+            const result = await orderCollection.insertOne(order)
             res.send(result)
         })
 
