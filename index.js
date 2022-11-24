@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const app = express()
 const port = process.env.PORT || 5000;
 const cors = require('cors');
@@ -19,6 +20,16 @@ async function run() {
         await client.connect()
         const booksCollection = client.db('book_info').collection('books')
         const orderCollection = client.db('book_info').collection('orders')
+
+        // JWT api
+
+        app.post('/login', async(req, res)=>{
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{
+                expiresIn: '1d'
+            })
+            res.send(accessToken)
+        })
 
         // Books CRUD api
         app.get('/books', async(req, res)=>{
