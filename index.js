@@ -91,6 +91,7 @@ async function run() {
         app.get('/order', verifyToken, async (req, res) => {
             const decodedEmail = req.decoded?.email;
             const OrdererEmail = req.query.email;
+            console.log(OrdererEmail);
 
             if (OrdererEmail === decodedEmail) {
                 const orders = await orderCollection.find({ email: OrdererEmail }).toArray()
